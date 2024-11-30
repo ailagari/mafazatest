@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00463c;
+            --secondary-color: #d4af37;
+            --background-color: #003831;
+            --text-color: #FFFFFF;
+            --card-background: #005347;
+            --input-background: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .profile-image-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary-color);
+        }
+
+        .edit-image {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--secondary-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        .profile-name {
+            font-size: 24px;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .profile-email {
+            color: #a8b3b1;
+        }
+
+        .section-card {
+            background-color: var(--card-background);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--secondary-color);
+        }
+
+        .edit-button {
+            background: none;
+            border: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .edit-button:hover {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #a8b3b1;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--input-background);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-color);
+        }
+
+        .form-group input:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .save-button {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cancel-button {
+            background-color: transparent;
+            border: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .security-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .security-card {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .security-card:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .security-icon {
+            font-size: 24px;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .edit-mode .form-group input:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: var(--secondary-color);
+        }
+        /* Base style for the navigation */
+.navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--primary-color);  /* Primary background color */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* Style for the navigation buttons */
+.nav-button {
+    background: none;
+    border: none;
+    color: inherit;  /* Inherit color for the icon */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+/* Inactive state - Grey icon color */
+.nav-button i {
+    color: grey;  /* Default inactive icon color */
+    font-size: 20px;
+}
+
+/* Hover effect - Green icon color */
+.nav-button:hover i {
+    color: #d6d6d6;  /* Green icon color on hover */
+}
+
+/* Active state - Gold icon color */
+.nav-button.active i {
+    color: #d4af37;  /* Gold icon color when selected */
+}
+
+/* Style for the text labels inside the buttons */
+.nav-button span {
+    font-size: 12px;
+    color: inherit;  /* Ensure text color is inherited */
+}
+
+/* Optional: Hover effect for the text */
+.nav-button:hover span {
+    color: #d6d6d6;  /* Make text green on hover */
+}
+
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-image-container">
+                <img src="https://placehold.co/150x150" alt="Profile" class="profile-image">
+                <div class="edit-image">
+                    <i class="fas fa-camera"></i>
+                </div>
+            </div>
+            <h1 class="profile-name">John Doe</h1>
+            <p class="profile-email">john.doe@example.com</p>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">Personal Information</h2>
+                <button class="edit-button" onclick="toggleEdit('personal')">
+                    <i class="fas fa-pencil-alt"></i> Edit
+                </button>
+            </div>
+            <form id="personalForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" value="John Doe" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" value="johndoe" disabled>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" value="john.doe@example.com" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" value="+1 234 567 8900" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" value="123 Main St, City, Country" disabled>
+                </div>
+                <div class="action-buttons" style="display: none;">
+                    <button type="button" class="cancel-button" onclick="cancelEdit('personal')">Cancel</button>
+                    <button type="submit" class="save-button">Save Changes</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Bank Account Details -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">Bank Account Details</h2>
+                <button class="edit-button" onclick="toggleEdit('bank')">
+                    <i class="fas fa-pencil-alt"></i> Edit
+                </button>
+            </div>
+            <form id="bankForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Bank Name</label>
+                        <input type="text" value="Example Bank" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Account Number</label>
+                        <input type="text" value="**** **** **** 1234" disabled>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>SWIFT Code</label>
+                        <input type="text" value="EXBKUS12" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Account Type</label>
+                        <input type="text" value="Savings" disabled>
+                    </div>
+                </div>
+                <div class="action-buttons" style="display: none;">
+                    <button type="button" class="cancel-button" onclick="cancelEdit('bank')">Cancel</button>
+                    <button type="submit" class="save-button">Save Changes</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">Security Settings</h2>
+            </div>
+            <div class="security-options">
+                <div class="security-card" onclick="changePassword()">
+                    <div class="security-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Change Password</h3>
+                    <p>Update your account password</p>
+                </div>
+                <div class="security-card" onclick="enable2FA()">
+                    <div class="security-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Two-Factor Auth</h3>
+                    <p>Enable extra security</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+<nav class="navigation">
+    <button class="nav-button" onclick="openPage('investmentdashboard.html')" id="investmentsButton">
+        <i class="fas fa-chart-line"></i>
+        <span>Investments</span>
+    </button>        
+    <button class="nav-button" onclick="openPage('return.html')" id="returnsButton">
+        <i class="fas fa-money-bill-wave"></i>
+        <span>Returns</span>
+    </button>
+    <button class="nav-button home-button" onclick="openPage('index.html')" id="homeButton">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </button>
+    <button class="nav-button" onclick="openPage('transfers.html')" id="transfersButton">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Transfers</span>
+    </button>
+    <button class="nav-button" onclick="openPage('profile.html')" id="profileButton">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+    </button>
+    <button class="nav-button active" onclick="openPage('loginandregistration.html')" id="loginButton">
+        <i class="fas fa-sign-in-alt"></i>
+        <span>Login</span>
+    </button>
+    <button class="nav-button" onclick="openPage('admin.html')" id="adminButton">
+        <i class="fas fa-user-shield"></i>
+        <span>Admin</span>
+    </button>
+    <button class="nav-button" onclick="openPage('accountant.html')" id="accountsButton">
+        <i class="fas fa-wallet"></i>
+        <span>Accounts</span>
+    </button>
+</nav>
+
+    <script>
+        function toggleEdit(section) {
+            const form = document.getElementById(section + 'Form');
+            const inputs = form.getElementsByTagName('input');
+            const actionButtons = form.querySelector('.action-buttons');
+
+            for(let input of inputs) {
+                input.disabled = !input.disabled;
+            }
+
+            form.classList.toggle('edit-mode');
+            actionButtons.style.display = actionButtons.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function cancelEdit(section) {
+            toggleEdit(section);
+            // Reset form values
+            document.getElementById(section + 'Form').reset();
+        }
+
+        function changePassword() {
+            alert('Change password functionality will be implemented here');
+        }
+
+        function enable2FA() {
+            alert('2FA setup functionality will be implemented here');
+        }
+        function openPage(fileName) {
+        window.location.href = fileName;  // Redirect to the specified HTML file
+    }
+    </script>
+</body>
+</html>

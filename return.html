@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Returns Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00463c;
+            --secondary-color: #d4af37;
+            --background-color: #003831;
+            --text-color: #FFFFFF;
+            --card-background: #005347;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .header {
+    display: flex;
+    justify-content: space-between;  /* Ensures logo and heading are on opposite ends */
+    align-items: center;  /* Aligns items vertically in the center */
+    padding: 10px 20px;  /* Adds some padding for spacing */
+}
+
+/* Logo container */
+.logo-container img {
+    max-height: 50px;  /* Adjust this value as needed to keep the logo at a consistent size */
+    width: auto;  /* Ensures the aspect ratio of the logo is maintained */
+}
+
+/* Heading styling */
+.header h1 {
+    font-size: 24px;  /* Adjust the font size of the heading */
+    font-weight: bold;
+    margin-left: 20px;  /* Adds space between logo and heading */
+    color: #d4af37;  /* Text color for the heading */
+}
+
+        .returns-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .returns-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background-color: var(--card-background);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .summary-title {
+            color: #a8b3b1;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .summary-value {
+            color: var(--secondary-color);
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .returns-section {
+            background-color: var(--card-background);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: var(--secondary-color);
+        }
+
+        .project-returns {
+            display: grid;
+            gap: 15px;
+        }
+
+        .project-card {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .project-name {
+            font-weight: bold;
+        }
+
+        .return-frequency {
+            color: var(--secondary-color);
+            font-size: 14px;
+        }
+
+        .return-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-label {
+            color: #a8b3b1;
+            margin-bottom: 5px;
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions-table th {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 12px;
+            text-align: left;
+            color: var(--secondary-color);
+        }
+
+        .transactions-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .amount-positive {
+            color: #4CAF50;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-button {
+            background-color: transparent;
+            border: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button.active {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+        /* Base style for the navigation */
+.navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--primary-color);  /* Primary background color */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* Style for the navigation buttons */
+.nav-button {
+    background: none;
+    border: none;
+    color: inherit;  /* Inherit color for the icon */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+/* Inactive state - Grey icon color */
+.nav-button i {
+    color: grey;  /* Default inactive icon color */
+    font-size: 20px;
+}
+
+/* Hover effect - Green icon color */
+.nav-button:hover i {
+    color: #d6d6d6;  /* Green icon color on hover */
+}
+
+/* Active state - Gold icon color */
+.nav-button.active i {
+    color: #d4af37;  /* Gold icon color when selected */
+}
+
+/* Style for the text labels inside the buttons */
+.nav-button span {
+    font-size: 12px;
+    color: inherit;  /* Ensure text color is inherited */
+}
+
+/* Optional: Hover effect for the text */
+.nav-button:hover span {
+    color: #d6d6d6;  /* Make text green on hover */
+}
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://www.mafazainvestment.com/wp-content/uploads/2024/06/mafaza-investments.svg" alt="Mafaza Logo">
+        </div>
+        <h1>Returns Dashboard</h1>
+    </header>
+
+    <div class="returns-container">
+        <!-- Returns Summary -->
+        <div class="returns-summary">
+            <div class="summary-card">
+                <div class="summary-title">Total Returns</div>
+                <div class="summary-value">$12,500</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Monthly Average</div>
+                <div class="summary-value">$1,250</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Annual Yield</div>
+                <div class="summary-value">12.5%</div>
+            </div>
+        </div>
+
+        <!-- Project Returns -->
+        <div class="returns-section">
+            <div class="section-header">
+                <h2 class="section-title">Project Returns</h2>
+            </div>
+            <div class="project-returns">
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-name">Green Energy Project</div>
+                        <div class="return-frequency">Monthly Returns</div>
+                    </div>
+                    <div class="return-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Last Return</div>
+                            <div>$500</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Next Return</div>
+                            <div>Dec 15, 2024</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Return Rate</div>
+                            <div>8% p.a.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-name">Real Estate Fund</div>
+                        <div class="return-frequency">Quarterly Returns</div>
+                    </div>
+                    <div class="return-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Last Return</div>
+                            <div>$1,200</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Next Return</div>
+                            <div>Jan 1, 2025</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Return Rate</div>
+                            <div>12% p.a.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Returns History -->
+        <div class="returns-section">
+            <div class="section-header">
+                <h2 class="section-title">Returns History</h2>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-button active">All</button>
+                <button class="filter-button">Monthly</button>
+                <button class="filter-button">Quarterly</button>
+                <button class="filter-button">Yearly</button>
+            </div>
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Project</th>
+                        <th>Amount</th>
+                        <th>Frequency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nov 15, 2024</td>
+                        <td>Green Energy Project</td>
+                        <td class="amount-positive">$500</td>
+                        <td>Monthly</td>
+                    </tr>
+                    <tr>
+                        <td>Oct 15, 2024</td>
+                        <td>Green Energy Project</td>
+                        <td class="amount-positive">$500</td>
+                        <td>Monthly</td>
+                    </tr>
+                    <tr>
+                        <td>Oct 1, 2024</td>
+                        <td>Real Estate Fund</td>
+                        <td class="amount-positive">$1,200</td>
+                        <td>Quarterly</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+<nav class="navigation">
+    <button class="nav-button" onclick="openPage('investmentdashboard.html')" id="investmentsButton">
+        <i class="fas fa-chart-line"></i>
+        <span>Investments</span>
+    </button>        
+    <button class="nav-button active" onclick="openPage('return.html')" id="returnsButton">
+        <i class="fas fa-money-bill-wave"></i>
+        <span>Returns</span>
+    </button>
+    <button class="nav-button home-button" onclick="openPage('index.html')" id="homeButton">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </button>
+    <button class="nav-button" onclick="openPage('transfers.html')" id="transfersButton">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Transfers</span>
+    </button>
+    <button class="nav-button" onclick="openPage('profile.html')" id="profileButton">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+    </button>
+    <button class="nav-button" onclick="openPage('loginandregistration.html')" id="loginButton">
+        <i class="fas fa-sign-in-alt"></i>
+        <span>Login</span>
+    </button>
+    <button class="nav-button" onclick="openPage('admin.html')" id="adminButton">
+        <i class="fas fa-user-shield"></i>
+        <span>Admin</span>
+    </button>
+    <button class="nav-button" onclick="openPage('accountant.html')" id="accountsButton">
+        <i class="fas fa-wallet"></i>
+        <span>Accounts</span>
+    </button>
+</nav>
+
+     <!-- Inline JavaScript -->
+     <script>
+        function openPage(fileName) {
+            window.location.href = fileName;  // Redirect to the specified HTML file
+        }
+    </script>
+</body>
+</html>

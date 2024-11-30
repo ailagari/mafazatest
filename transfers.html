@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfers Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00463c;
+            --secondary-color: #d4af37;
+            --background-color: #003831;
+            --text-color: #FFFFFF;
+            --card-background: #005347;
+            --success-color: #4CAF50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Header Container */
+.header {
+    display: flex;
+    justify-content: space-between;  /* Ensures logo and heading are on opposite ends */
+    align-items: center;  /* Aligns items vertically in the center */
+    padding: 10px 20px;  /* Adds some padding for spacing */
+}
+
+/* Logo container */
+.logo-container img {
+    max-height: 50px;  /* Adjust this value as needed to keep the logo at a consistent size */
+    width: auto;  /* Ensures the aspect ratio of the logo is maintained */
+}
+
+/* Heading styling */
+.header h1 {
+    font-size: 24px;  /* Adjust the font size of the heading */
+    font-weight: bold;
+    margin-left: 20px;  /* Adds space between logo and heading */
+    color: #d4af37;  /* Text color for the heading */
+}
+
+
+        .transfers-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background-color: var(--card-background);
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .action-icon {
+            font-size: 24px;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .action-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .action-description {
+            font-size: 14px;
+            color: #a8b3b1;
+        }
+
+        .form-section {
+            background-color: var(--card-background);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: var(--text-color);
+        }
+
+        .form-group select option {
+            background-color: var(--primary-color);
+        }
+
+        .file-upload {
+            border: 2px dashed var(--secondary-color);
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .submit-button {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .current-setting {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background-color: var(--warning-color);
+            color: var(--text-color);
+        }
+
+        .status-approved {
+            background-color: var(--success-color);
+            color: var(--text-color);
+        }
+
+        .status-rejected {
+            background-color: var(--danger-color);
+            color: var(--text-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .requests-history {
+            margin-top: 30px;
+        }
+
+        .requests-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .requests-table th {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 12px;
+            text-align: left;
+            color: var(--secondary-color);
+        }
+
+        .requests-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Base style for the navigation */
+/* Base style for the navigation */
+.navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--primary-color);  /* Primary background color */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* Style for the navigation buttons */
+.nav-button {
+    background: none;
+    border: none;
+    color: inherit;  /* Inherit color for the icon */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+/* Inactive state - Grey icon color */
+.nav-button i {
+    color: grey;  /* Default inactive icon color */
+    font-size: 20px;
+}
+
+/* Hover effect - Green icon color */
+.nav-button:hover i {
+    color: #d6d6d6;  /* Green icon color on hover */
+}
+
+/* Active state - Gold icon color */
+.nav-button.active i {
+    color: #d4af37;  /* Gold icon color when selected */
+}
+
+/* Style for the text labels inside the buttons */
+.nav-button span {
+    font-size: 12px;
+    color: inherit;  /* Ensure text color is inherited */
+}
+
+/* Optional: Hover effect for the text */
+.nav-button:hover span {
+    color: #d6d6d6;  /* Make text green on hover */
+}
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://www.mafazainvestment.com/wp-content/uploads/2024/06/mafaza-investments.svg" alt="Mafaza Logo">
+        </div>
+        <h1>Transfers Dashboard</h1>
+    </header>
+
+    <div class="transfers-container">
+        <!-- Action Cards -->
+        <div class="action-cards">
+            <div class="action-card" onclick="showForm('newInvestment')">
+                <div class="action-icon"><i class="fas fa-plus-circle"></i></div>
+                <div class="action-title">New Investment</div>
+                <div class="action-description">Upload new investment details and proof of payment</div>
+            </div>
+            <div class="action-card" onclick="showForm('returnPreference')">
+                <div class="action-icon"><i class="fas fa-sync-alt"></i></div>
+                <div class="action-title">Return Preferences</div>
+                <div class="action-description">Modify how you receive your investment returns</div>
+            </div>
+            <div class="action-card" onclick="showForm('withdrawal')">
+                <div class="action-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="action-title">Withdrawal Request</div>
+                <div class="action-description">Request to withdraw from your investments</div>
+            </div>
+        </div>
+
+        <!-- New Investment Form -->
+        <div id="newInvestmentForm" class="form-section">
+            <h2 class="section-title">New Investment</h2>
+            <form>
+                <div class="form-group">
+                    <label>Project</label>
+                    <select required>
+                        <option value="">Select Project</option>
+                        <option value="green-energy">Green Energy Project</option>
+                        <option value="real-estate">Real Estate Fund</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" placeholder="Enter amount" required>
+                </div>
+                <div class="form-group">
+                    <label>Payment Proof</label>
+                    <div class="file-upload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload screenshot</p>
+                    </div>
+                </div>
+                <button type="submit" class="submit-button">Submit Investment</button>
+            </form>
+        </div>
+
+        <!-- Return Preference Form -->
+        <div id="returnPreferenceForm" class="form-section">
+            <h2 class="section-title">Return Preferences</h2>
+            <div class="current-setting">
+                <p>Current Setting: Monthly Returns</p>
+                <p>Project: Green Energy Project</p>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>Project</label>
+                    <select required>
+                        <option value="">Select Project</option>
+                        <option value="green-energy">Green Energy Project</option>
+                        <option value="real-estate">Real Estate Fund</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Preferred Frequency</label>
+                    <select required>
+                        <option value="monthly">Monthly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-button">Request Change</button>
+            </form>
+        </div>
+
+        <!-- Withdrawal Form -->
+        <div id="withdrawalForm" class="form-section">
+            <h2 class="section-title">Withdrawal Request</h2>
+            <form>
+                <div class="form-group">
+                    <label>Project</label>
+                    <select required>
+                        <option value="">Select Project</option>
+                        <option value="green-energy">Green Energy Project ($10,000 available)</option>
+                        <option value="real-estate">Real Estate Fund ($25,000 available)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Withdrawal Amount</label>
+                    <input type="number" placeholder="Enter amount" required>
+                </div>
+                <div class="form-group">
+                    <label>Reason for Withdrawal</label>
+                    <select required>
+                        <option value="">Select Reason</option>
+                        <option value="personal">Personal Reasons</option>
+                        <option value="emergency">Emergency</option>
+                        <option value="investment">Other Investment Opportunity</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-button">Submit Request</button>
+            </form>
+        </div>
+
+        <!-- Requests History -->
+        <div class="requests-history">
+            <h2 class="section-title">Recent Requests</h2>
+            <table class="requests-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Project</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nov 20, 2024</td>
+                        <td>New Investment</td>
+                        <td>Green Energy Project</td>
+                        <td>$5,000</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td>Nov 15, 2024</td>
+                        <td>Return Preference</td>
+                        <td>Real Estate Fund</td>
+                        <td>-</td>
+                        <td><span class="status-badge status-approved">Approved</span></td>
+                    </tr>
+                    <tr>
+                        <td>Nov 10, 2024</td>
+                        <td>Withdrawal</td>
+                        <td>Green Energy Project</td>
+                        <td>$2,000</td>
+                        <td><span class="status-badge status-rejected">Rejected</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Navigation Bar -->
+<nav class="navigation">
+    <button class="nav-button" onclick="openPage('investmentdashboard.html')" id="investmentsButton">
+        <i class="fas fa-chart-line"></i>
+        <span>Investments</span>
+    </button>        
+    <button class="nav-button" onclick="openPage('return.html')" id="returnsButton">
+        <i class="fas fa-money-bill-wave"></i>
+        <span>Returns</span>
+    </button>
+    <button class="nav-button home-button" onclick="openPage('index.html')" id="homeButton">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </button>
+    <button class="nav-button active" onclick="openPage('transfers.html')" id="transfersButton">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Transfers</span>
+    </button>
+    <button class="nav-button" onclick="openPage('profile.html')" id="profileButton">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+    </button>
+    <button class="nav-button" onclick="openPage('loginandregistration.html')" id="loginButton">
+        <i class="fas fa-sign-in-alt"></i>
+        <span>Login</span>
+    </button>
+    <button class="nav-button" onclick="openPage('admin.html')" id="adminButton">
+        <i class="fas fa-user-shield"></i>
+        <span>Admin</span>
+    </button>
+    <button class="nav-button" onclick="openPage('accountant.html')" id="accountsButton">
+        <i class="fas fa-wallet"></i>
+        <span>Accounts</span>
+    </button>
+</nav>
+
+
+    <!-- Inline JavaScript -->
+<script>
+    function showForm(formType) {
+        // Hide all forms
+        document.querySelectorAll('.form-section').forEach(form => {
+            form.classList.remove('active');
+        });
+
+        // Show selected form
+        const selectedForm = document.getElementById(formType + 'Form');
+        if (selectedForm) {
+            selectedForm.classList.add('active');
+            selectedForm.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    function openPage(fileName) {
+        window.location.href = fileName;  // Redirect to the specified HTML file
+    }
+</script>
+
+</body>
+</html>

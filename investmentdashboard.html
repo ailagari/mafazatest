@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mafaza - Investments</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00463c;
+            --secondary-color: #d4af37;
+            --background-color: #003831;
+            --text-color: #FFFFFF;
+            --card-background: #005347;
+            --active-nav: #d4af37;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .header {
+    display: flex;
+    justify-content: space-between;  /* Ensures logo and heading are on opposite ends */
+    align-items: center;  /* Aligns items vertically in the center */
+    padding: 10px 20px;  /* Adds some padding for spacing */
+}
+
+/* Logo container */
+.logo-container img {
+    max-height: 50px;  /* Adjust this value as needed to keep the logo at a consistent size */
+    width: auto;  /* Ensures the aspect ratio of the logo is maintained */
+}
+
+/* Heading styling */
+.header h1 {
+    font-size: 24px;  /* Adjust the font size of the heading */
+    font-weight: bold;
+    margin-left: 20px;  /* Adds space between logo and heading */
+    color: #d4af37;  /* Text color for the heading */
+}
+
+        .investment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: var(--secondary-color);
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .project-card {
+            background-color: var(--card-background);
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--secondary-color);
+        }
+
+        .project-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .project-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stat-item {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #a8b3b1;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .transactions-section {
+            background-color: var(--card-background);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .transaction-list {
+            list-style: none;
+        }
+
+        .transaction-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-date {
+            font-size: 14px;
+            color: #a8b3b1;
+        }
+
+        .transaction-project {
+            font-weight: 600;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .transaction-shares {
+            font-size: 14px;
+            color: #a8b3b1;
+        }
+
+        /* Base style for the navigation */
+.navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--primary-color);  /* Primary background color */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* Style for the navigation buttons */
+.nav-button {
+    background: none;
+    border: none;
+    color: inherit;  /* Inherit color for the icon */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+/* Inactive state - Grey icon color */
+.nav-button i {
+    color: grey;  /* Default inactive icon color */
+    font-size: 20px;
+}
+
+/* Hover effect - Green icon color */
+.nav-button:hover i {
+    color: #d6d6d6;  /* Green icon color on hover */
+}
+
+/* Active state - Gold icon color */
+.nav-button.active i {
+    color: #d4af37;  /* Gold icon color when selected */
+}
+
+/* Style for the text labels inside the buttons */
+.nav-button span {
+    font-size: 12px;
+    color: inherit;  /* Ensure text color is inherited */
+}
+
+/* Optional: Hover effect for the text */
+.nav-button:hover span {
+    color: #d6d6d6;  /* Make text green on hover */
+}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://www.mafazainvestment.com/wp-content/uploads/2024/06/mafaza-investments.svg" alt="Mafaza Logo">
+        </div>
+        <h1>Investments</h1>
+    </header>
+
+    <div class="investment-container">
+        <!-- Invested Projects Section -->
+        <h2 class="section-title">Invested Projects</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <div class="project-title">Green Valley Estate</div>
+                <div class="project-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Invested Amount</div>
+                        <div class="stat-value">$50,000</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Shareholding</div>
+                        <div class="stat-value">2.5%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-title">Tech Park Tower</div>
+                <div class="project-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Invested Amount</div>
+                        <div class="stat-value">$75,000</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Shareholding</div>
+                        <div class="stat-value">3.8%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Projects Section -->
+        <h2 class="section-title">New Projects</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <div class="project-title">Marina Heights</div>
+                <div class="project-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Minimum Investment</div>
+                        <div class="stat-value">$25,000</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Expected Returns</div>
+                        <div class="stat-value">12%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-title">Solar Farm Project</div>
+                <div class="project-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Minimum Investment</div>
+                        <div class="stat-value">$40,000</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Expected Returns</div>
+                        <div class="stat-value">15%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions Section -->
+        <div class="transactions-section">
+            <h2 class="section-title">Transaction History</h2>
+            <ul class="transaction-list">
+                <li class="transaction-item">
+                    <span class="transaction-date">Nov 28, 2024</span>
+                    <span class="transaction-project">Green Valley Estate</span>
+                    <span class="transaction-amount">$50,000</span>
+                    <span class="transaction-shares">2.5%</span>
+                </li>
+                <li class="transaction-item">
+                    <span class="transaction-date">Nov 15, 2024</span>
+                    <span class="transaction-project">Tech Park Tower</span>
+                    <span class="transaction-amount">$75,000</span>
+                    <span class="transaction-shares">3.8%</span>
+                </li>
+                <li class="transaction-item">
+                    <span class="transaction-date">Oct 30, 2024</span>
+                    <span class="transaction-project">Marina Heights</span>
+                    <span class="transaction-amount">$25,000</span>
+                    <span class="transaction-shares">1.2%</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+<nav class="navigation">
+    <button class="nav-button active" onclick="openPage('investmentdashboard.html')" id="investmentsButton">
+        <i class="fas fa-chart-line"></i>
+        <span>Investments</span>
+    </button>        
+    <button class="nav-button" onclick="openPage('return.html')" id="returnsButton">
+        <i class="fas fa-money-bill-wave"></i>
+        <span>Returns</span>
+    </button>
+    <button class="nav-button home-button" onclick="openPage('index.html')" id="homeButton">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </button>
+    <button class="nav-button" onclick="openPage('transfers.html')" id="transfersButton">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Transfers</span>
+    </button>
+    <button class="nav-button" onclick="openPage('profile.html')" id="profileButton">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+    </button>
+    <button class="nav-button" onclick="openPage('loginandregistration.html')" id="loginButton">
+        <i class="fas fa-sign-in-alt"></i>
+        <span>Login</span>
+    </button>
+    <button class="nav-button" onclick="openPage('admin.html')" id="adminButton">
+        <i class="fas fa-user-shield"></i>
+        <span>Admin</span>
+    </button>
+    <button class="nav-button" onclick="openPage('accountant.html')" id="accountsButton">
+        <i class="fas fa-wallet"></i>
+        <span>Accounts</span>
+    </button>
+</nav>
+
+     <!-- Inline JavaScript -->
+     <script>
+        function openPage(fileName) {
+            window.location.href = fileName;  // Redirect to the specified HTML file
+        }
+    </script>
+</body>
+</html>
